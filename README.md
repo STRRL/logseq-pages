@@ -14,7 +14,7 @@ So I would write the cli tools to:
 ## Overview
 
 ```text
-logseq-pages list --output table --work-directory ~/playground/github/whatiknown        
+$ logseq-pages list --work-directory ~/playground/github/whatiknown        
 +-------+-----------------------------------+--------+-----------------------+-----------------------------------------+
 |     # | NAME                              | PUBLIC | ALIAS                 | PATH                                    |
 +-------+-----------------------------------+--------+-----------------------+-----------------------------------------+
@@ -57,4 +57,36 @@ logseq-pages list --output table --work-directory ~/playground/github/whatiknown
 | TOTAL | 35                                |        |                       |                                         |
 +-------+-----------------------------------+--------+-----------------------+-----------------------------------------+
 
+```
+
+With filter `private` and output `json`, beatified by `jq`:
+
+```
+$ logseq-pages list --output json --work-directory ~/playground/github/whatiknown --filter private | jq
+[
+  {
+    "Name": "2022_01_04.md",
+    "Alias": [],
+    "Path": "journals/2022_01_04.md",
+    "Public": false
+  },
+  {
+    "Name": "2022_01_10.md",
+    "Alias": [],
+    "Path": "journals/2022_01_10.md",
+    "Public": false
+  },
+  {
+    "Name": "2022_01_20.md",
+    "Alias": [],
+    "Path": "journals/2022_01_20.md",
+    "Public": false
+  },
+  {
+    "Name": "2022_01_21.md",
+    "Alias": [],
+    "Path": "journals/2022_01_21.md",
+    "Public": false
+  }
+]
 ```

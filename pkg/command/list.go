@@ -21,7 +21,11 @@ func NewListCommand(rootOption *RootOption) *cobra.Command {
 	}
 
 	listCommand := &cobra.Command{
-		Use: "list",
+		Use:               "list [flags]",
+		Short:             "list logseq pages",
+		Long:              "list logseq pages with filter and output type",
+		ValidArgsFunction: argsCompletion,
+		ValidArgs:         []string{},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return listLogseqPages(rootOption, &listOption)
 		},
@@ -30,7 +34,45 @@ func NewListCommand(rootOption *RootOption) *cobra.Command {
 	listCommand.Flags().StringVarP((*string)(&listOption.FilterType), "filter", "f", string(AllFilter), "filter type, available values: all, public, private")
 	listCommand.Flags().StringVarP((*string)(&listOption.Output), "output", "o", string(TableOutput), "output type, available values: table, json")
 
+	err := listCommand.RegisterFlagCompletionFunc("filter", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{
+			fmt.Sprintf("%s\t%s", string(AllFilter), "show all pages"),
+			fmt.Sprintf("%s\t%s", string(PublicFilter), "only show public pages"),
+			fmt.Sprintf("%s\t%s", string(PrivateFilter), "only show private pages"),
+		}, cobra.ShellCompDirectiveNoFileComp
+	})
+	if err != nil {
+		// not expect to failed in here
+		panic(err)
+	}
+	err = listCommand.RegisterFlagCompletionFunc("output", func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+		return []string{
+			fmt.Sprintf("%s\t%s", string(TableOutput), "show as a table"),
+			fmt.Sprintf("%s\t%s", string(JSONOutput), "show as json"),
+		}, cobra.ShellCompDirectiveNoFileComp
+	})
+	if err != nil {
+		// not expect to failed in here
+		panic(err)
+	}
+
 	return listCommand
+}
+
+func argsCompletion(cmd *cobra.Command, args []string, complete string) ([]string, cobra.ShellCompDirective) {
+	if !cmd.Flag("filter").Changed || !cmd.Flag("output").Changed || !cmd.Flags().Changed("work-directory") {
+		return []string{"-"}, cobra.ShellCompDirectiveNoSpace | cobra.ShellCompDirectiveNoFileComp
+	}
+	return nil, cobra.ShellCompDirectiveNoFileComp
+}
+
+func contains(arr []string, str string) bool {
+	for _, v := range arr {
+		if v == str {
+			return true
+		}
+	}
+	return false
 }
 
 type ListOption struct {
@@ -41,7 +83,7 @@ type ListOption struct {
 type OutputType string
 
 const TableOutput OutputType = "table"
-const JsonOutput OutputType = "json"
+const JSONOutput OutputType = "json"
 
 type FilterType string
 
@@ -89,7 +131,7 @@ func listLogseqPages(rootOption *RootOption, listOption *ListOption) error {
 		}
 		fmt.Println(out)
 		return nil
-	} else if listOption.Output == JsonOutput {
+	} else if listOption.Output == JSONOutput {
 		out, err := json.Marshal(pages)
 		if err != nil {
 			return err

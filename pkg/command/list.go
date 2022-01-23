@@ -155,7 +155,7 @@ func listLogseqPages(rootOption *RootOption, listOption *ListOption) error {
 func loadLogseqPageFromFile(file string) (*model.LogseqPage, error) {
 	result := model.LogseqPage{
 		Name:   filepath.Base(file),
-		Alias:  nil,
+		Alias:  []string{},
 		Path:   file,
 		Public: false,
 	}

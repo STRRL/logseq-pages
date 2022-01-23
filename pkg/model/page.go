@@ -25,7 +25,7 @@ func (it *LogseqPageList) RenderAsTable() (string, error) {
 		} else {
 			columnPublic = ""
 		}
-		tableWriter.AppendRow(table.Row{index, item.Name, columnPublic, strings.Join(item.Alias, ", make")})
+		tableWriter.AppendRow(table.Row{index, item.Name, columnPublic, strings.Join(item.Alias, ", ")})
 	}
 	tableWriter.AppendFooter(table.Row{"", "Total", len(*it)})
 	return tableWriter.Render(), nil

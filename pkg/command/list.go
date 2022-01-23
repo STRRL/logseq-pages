@@ -94,6 +94,14 @@ const PrivateFilter FilterType = "private"
 func listLogseqPages(rootOption *RootOption, listOption *ListOption) error {
 	var markdownFiles []string
 	appendToMarkdownFiles := func(path string, d fs.DirEntry, err error) error {
+
+		parentDir := filepath.Dir(path)
+		if strings.HasSuffix(parentDir, ".git") ||
+			strings.HasSuffix(parentDir, "bak") ||
+			strings.HasSuffix(parentDir, ".recycle") {
+			return nil
+		}
+
 		if strings.Contains(path, "md") {
 			markdownFiles = append(markdownFiles, path)
 		}

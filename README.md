@@ -2,7 +2,9 @@
 
 A cli tool for list all pages in logseq repo, marked with public or private.
 
-When I using [logseq](https://github.com/logseq/logseq) to build my knowledge base and publish publicly, I found that "Make it public for publishing" and "Make it private" could only be accessed on the application. So I have to manually walk though all the pages and make sure that all I wanted to be published pages have been marked as public.
+When I using [logseq](https://github.com/logseq/logseq) to build my knowledge base and publish publicly, I found that "
+Make it public for publishing" and "Make it private" could only be accessed on the application. So I have to manually
+walk though all the pages and make sure that all I wanted to be published pages have been marked as public.
 
 That is terrible experience.
 
@@ -10,6 +12,12 @@ So I would write the cli tools to:
 
 - list all the pages
 - [WIP] mark pages as public or private with interactive terminal ui
+
+## Installation
+
+You could use `go install github.com/strrl/logseq-pages/cmd/logseq-pages@latest` to install the tool.
+
+Or clone this repo, and run `make` then you could find the binary `bin/logseq-pages`.
 
 ## Overview
 

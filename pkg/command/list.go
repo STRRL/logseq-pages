@@ -114,7 +114,7 @@ func listLogseqPages(rootOption *RootOption, listOption *ListOption) error {
 	}
 	var pages model.LogseqPageList
 	for _, file := range markdownFiles {
-		logseqPage, err := loadLogseqPageFromFile(file)
+		logseqPage, err := loadLogseqPageFromFile(rootOption.WorkDirectory, file)
 		if err != nil {
 			continue
 		}
@@ -152,11 +152,19 @@ func listLogseqPages(rootOption *RootOption, listOption *ListOption) error {
 	}
 }
 
-func loadLogseqPageFromFile(file string) (*model.LogseqPage, error) {
+func loadLogseqPageFromFile(base string, file string) (*model.LogseqPage, error) {
+	var path string
+	rel, err := filepath.Rel(base, file)
+	if err != nil {
+		path = file
+	} else {
+		path = rel
+	}
+
 	result := model.LogseqPage{
 		Name:   filepath.Base(file),
 		Alias:  []string{},
-		Path:   file,
+		Path:   path,
 		Public: false,
 	}
 

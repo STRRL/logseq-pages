@@ -16,7 +16,13 @@ type LogseqPageList []LogseqPage
 
 func (it *LogseqPageList) RenderAsTable() (string, error) {
 	tableWriter := table.NewWriter()
-	tableWriter.AppendHeader(table.Row{"#", "Name", "Public", "Alias"})
+	tableWriter.AppendHeader(table.Row{
+		"#",
+		"Name",
+		"Public",
+		"Alias",
+		"Path",
+	})
 
 	for index, item := range *it {
 		var columnPublic string
@@ -25,9 +31,15 @@ func (it *LogseqPageList) RenderAsTable() (string, error) {
 		} else {
 			columnPublic = ""
 		}
-		tableWriter.AppendRow(table.Row{index, item.Name, columnPublic, strings.Join(item.Alias, ", ")})
+		tableWriter.AppendRow(table.Row{
+			index,
+			item.Name,
+			columnPublic,
+			strings.Join(item.Alias, ", "),
+			item.Path,
+		})
 	}
-	tableWriter.AppendFooter(table.Row{"", "Total", len(*it)})
+	tableWriter.AppendFooter(table.Row{"Total", len(*it)})
 	return tableWriter.Render(), nil
 }
 
